@@ -4,33 +4,14 @@
       class="fixed top-0 left-0 right-0 z-50 bg-primary text-primary-content p-4 flex justify-between items-center min-w-80"
     >
       <h1 class="text-2xl font-bold">Tatravel</h1>
-
-      <!-- Desktop Navigation -->
-      <nav class="hidden lg:flex items-center space-x-4">
-        <!-- Search Bar -->
+      <!--  Search  -->
+      <div class="mx-3 join ">
         <input
           type="text"
           placeholder="Search books..."
-          class="input input-bordered input-primary"
+          class="input  input-bordered input-primary join-item max-w-32"
         />
-        <router-link
-          v-for="tab in tabs"
-          :key="tab.path"
-          :to="tab.path"
-          class="btn btn-ghost"
-        >
-          <i :class="['fas', tab.icon, 'mr-2']"></i>
-          {{ tab.name }}
-        </router-link>
-      </nav>
-
-      <!--  Search for Mobile  -->
-      <div class="ml-5 lg:hidden">
-        <input
-          type="text"
-          placeholder="Search books..."
-          class="input input-bordered input-primary max-w-32"
-        />
+        <button class="btn btn-neutral join-item max-w-1 fa fa-magnifying-glass"style="color: #ffd43b"></button>
       </div>
     </header>
 
@@ -77,13 +58,9 @@ export default {
     const tabs = ref([
       { name: "Home", icon: "fa-home", path: "/" },
       { name: "Travel", icon: "fa-van-shuttle", path: "/travel" },
-      { name: "Chat", icon: "fa-comments", path: "/chat" },
-      { name: "Map", icon: "fa-map-marker-alt", path: "/map" },
-      { name: "Profile", icon: "fa-user", path: "/profile" },
-    ]);
-
-    const dropdowns = ref([
-      { name: "Profile", icon: "fa-user", path: "/profile" },
+      { name: "Ai", icon: "fa-robot", path: "/aichat" },
+      { name: "Map", icon: "fa-map-location-dot", path: "/map" },
+      { name: "Profile", icon: "fa-address-card", path: "/profile" },
     ]);
 
     return { tabs};
