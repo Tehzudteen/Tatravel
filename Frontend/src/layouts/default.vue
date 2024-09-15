@@ -76,7 +76,7 @@ export default {
     const route = useRoute();
     const tabs = ref([
       { name: "Home", icon: "fa-home", path: "/" },
-      { name: "Book", icon: "fa-book", path: "/book" },
+      { name: "Travel", icon: "fa-van-shuttle", path: "/travel" },
       { name: "Chat", icon: "fa-comments", path: "/chat" },
       { name: "Map", icon: "fa-map-marker-alt", path: "/map" },
       { name: "Profile", icon: "fa-user", path: "/profile" },
@@ -86,7 +86,7 @@ export default {
       { name: "Profile", icon: "fa-user", path: "/profile" },
     ]);
 
-    return { tabs, dropdowns };
+    return { tabs};
   },
 };
 </script>
