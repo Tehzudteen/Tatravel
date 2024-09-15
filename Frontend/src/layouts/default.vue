@@ -22,7 +22,7 @@
 
     <!-- Mobile Bottom Navigation -->
     <nav
-      class="btm-nav bg bg-base-100 shadow-lg lg:hidden md:hidden hidden absolute min-w-80"
+      class="btm-nav bg bg-base-100 text-primary-content shadow-lg lg:hidden md:hidden hidden absolute min-w-80 drop-shadow"
     >
       <router-link
         v-for="tab in tabs"
@@ -31,14 +31,9 @@
         custom
         v-slot="{ navigate, isActive }"
       >
-        <button @click="navigate" :class="{ active: isActive }">
+        <button @click="navigate " :class="{ active: isActive }">
           <i
-            :class="[
-              'fas',
-              tab.icon,
-              'text-2xl',
-              { 'animate-bounce': isActive },
-            ]"
+            :class="['fas',tab.icon,'text-2xl',{ 'animate-bounce': isActive },]"
           ></i>
           <span class="btm-nav-label">{{ tab.name }}</span>
         </button>
@@ -58,10 +53,11 @@ export default {
     const tabs = ref([
       { name: "Home", icon: "fa-home", path: "/" },
       { name: "Travel", icon: "fa-van-shuttle", path: "/travel" },
-      { name: "Ai", icon: "fa-robot", path: "/aichat" },
+      { name: "Ai", icon: "fa-poo", path: "/aichat" },
       { name: "Map", icon: "fa-map-location-dot", path: "/map" },
       { name: "Profile", icon: "fa-address-card", path: "/profile" },
     ]);
+
 
     return { tabs};
   },
@@ -78,7 +74,7 @@ export default {
 }
 
 .btm-nav > button.active {
-  @apply bg-primary text-primary-content;
+  @apply bg-primary rounded-t-box text-base-100;
 }
 
 @keyframes bounce {
@@ -87,7 +83,7 @@ export default {
     transform: translateY(0);
   }
   50% {
-    transform: translateY(-2px);
+    transform: translateY(-5px);
   }
 }
 
@@ -95,10 +91,5 @@ export default {
   animation: bounce 0.25s;
 }
 
-/* Add this media query to hide btm-nav on desktop sizes */
-@media (min-width: 811px) {
-  .btm-nav {
-    display: none;
-  }
-}
+
 </style>
