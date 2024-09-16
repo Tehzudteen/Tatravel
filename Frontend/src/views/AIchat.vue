@@ -147,6 +147,7 @@ export default {
 </template>
 
 <style scoped>
+
 @media (min-width: 0px) {
   .sm-responsive {
     margin-bottom: 60px;
