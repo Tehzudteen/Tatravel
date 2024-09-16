@@ -15,9 +15,3 @@
   </div>
 </template>
 
-<style scoped>
-.map-container {
-  height: 400px;
-  width: 100%;
-}
-</style>

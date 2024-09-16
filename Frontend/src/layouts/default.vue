@@ -5,13 +5,16 @@
     >
       <h1 class="text-2xl font-bold">Tatravel</h1>
       <!--  Search  -->
-      <div class="mx-3 join ">
+      <div class="mx-3 join">
         <input
           type="text"
           placeholder="Search books..."
-          class="input  input-bordered input-primary join-item max-w-32"
+          class="input input-bordered input-primary join-item max-w-32"
         />
-        <button class="btn btn-neutral join-item max-w-1 fa fa-magnifying-glass"style="color: #ffd43b"></button>
+        <button
+          class="btn btn-neutral join-item max-w-1 fa fa-magnifying-glass"
+          style="color: #ffd43b"
+        ></button>
       </div>
     </header>
 
@@ -31,9 +34,14 @@
         custom
         v-slot="{ navigate, isActive }"
       >
-        <button @click="navigate " :class="{ active: isActive }">
+        <button @click="navigate" :class="{ active: isActive }">
           <i
-            :class="['fas',tab.icon,'text-2xl',{ 'animate-bounce': isActive },]"
+            :class="[
+              'fas',
+              tab.icon,
+              'text-2xl',
+              { 'animate-bounce': isActive },
+            ]"
           ></i>
           <span class="btm-nav-label">{{ tab.name }}</span>
         </button>
@@ -58,8 +66,7 @@ export default {
       { name: "Profile", icon: "fa-address-card", path: "/profile" },
     ]);
 
-
-    return { tabs};
+    return { tabs };
   },
 };
 </script>
@@ -90,6 +97,4 @@ export default {
 .animate-bounce {
   animation: bounce 0.25s;
 }
-
-
 </style>

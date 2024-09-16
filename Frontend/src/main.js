@@ -1,5 +1,5 @@
 import './style.css';
-
+ // Default weight is 400
 
 
 import { createApp } from 'vue'
