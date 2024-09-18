@@ -125,7 +125,7 @@ export default {
 
     <!-- Chat input -->
     <div
-      class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 flex justify-between min-w-99 sm-responsive mb-responsive lg-responsive"
+      class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 flex justify-between min-w-99 sm-responsive "
     >
       <input
         v-model="userMessage"

@@ -57,7 +57,7 @@ import { useRoute } from "vue-router";
 export default {
   name: "DefaultLayout",
   setup() {
-    const route = useRoute();
+
     const tabs = ref([
       { name: "Home", icon: "fa-home", path: "/" },
       { name: "Travel", icon: "fa-van-shuttle", path: "/travel" },

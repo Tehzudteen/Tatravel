@@ -1,10 +1,9 @@
 <template>
-  <div class="profile">
-    <h2 class="text-2xl font-bold mb-4">User Profile</h2>
-    <p>Manage your profile settings here.</p>
+  <div >
+    <div class="h-fit  p-2 my-2 border-4 border-orange-400 rounded-md ">
+      <div class="h-36 bg-black"></div>
+    </div>
   </div>
 </template>
 
-<script setup>
-
-</script>
+<script setup></script>
