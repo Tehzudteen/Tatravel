@@ -32,29 +32,8 @@
             </p>
           </div>
         </div>
-        <p class="mt-4 text-sm sm:text-base">{{ user.bio }}</p>
-        <div class="stats stats-vertical sm:stats-horizontal shadow mt-4 text-xs sm:text-sm">
-          <div class="stat">
-            <div class="stat-title">Countries Visited</div>
-            <div class="stat-value text-primary text-lg sm:text-xl">{{ user.countriesVisited }}</div>
-          </div>
-          <div class="stat">
-            <div class="stat-title">Travel Points</div>
-            <div class="stat-value text-secondary text-lg sm:text-xl">{{ user.travelPoints }}</div>
-          </div>
-        </div>
-        <div class="divider text-sm sm:text-base">Recent Trips</div>
-        <div class="space-y-2 sm:space-y-4">
-          <div v-for="trip in user.recentTrips" :key="trip.id" class="card bg-base-200 shadow-sm">
-            <div class="card-body p-3 sm:p-4">
-              <h3 class="card-title text-base sm:text-lg">{{ trip.destination }}</h3>
-              <p class="text-sm">{{ trip.date }}</p>
-              <div class="card-actions justify-end">
-                <button class="btn btn-primary btn-xs sm:btn-sm">View Details</button>
-              </div>
-            </div>
-          </div>
-        </div>
+       
+      
         <div class="mt-4 space-y-2">
           <button class="btn btn-primary btn-sm sm:btn-md w-full" @click="changePassword">Change Password</button>
           <button class="btn btn-error btn-sm sm:btn-md w-full" @click="logout">Logout</button>
@@ -62,21 +41,7 @@
       </div>
     </div>
 
-    <!-- Confirmation Modal -->
-    <transition name="modal">
-      <div v-if="showConfirm" class="fixed inset-0 flex items-center justify-center z-50">
-        <div class="modal modal-open">
-          <div class="modal-box">
-            <h2 class="font-bold text-lg">Confirm Changes</h2>
-            <p>Are you sure you want to update your {{ confirmField }}?</p>
-            <div class="modal-action">
-              <button class="btn" @click="confirmChanges">Confirm</button>
-              <button class="btn btn-secondary" @click="cancelChanges">Cancel</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </transition>
+    
   </div>
 </template>
 
@@ -90,13 +55,6 @@ const user = reactive({
   bio: 'Passionate traveler and photographer. Always seeking new adventures!',
   avatarUrl: 'https://i.pinimg.com/originals/87/85/ad/8785ad36346ae3ba48ab80cabd498b8b.gif',
   coverPhoto: 'https://i.pinimg.com/originals/87/85/ad/8785ad36346ae3ba48ab80cabd498b8b.gif',
-  countriesVisited: 25,
-  travelPoints: 1250,
-  recentTrips: [
-    { id: 1, destination: 'Paris, France', date: 'May 2023' },
-    { id: 2, destination: 'Tokyo, Japan', date: 'August 2023' },
-    { id: 3, destination: 'Rio de Janeiro, Brazil', date: 'December 2023' }
-  ]
 })
 
 const editing = reactive({

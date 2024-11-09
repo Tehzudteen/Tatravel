@@ -7,7 +7,9 @@ import Profile from "@/views/Profile.vue";
 import Detail from '@/components/Detail.vue';
 import Login from '@/views/Login.vue';
 import Register from "@/views/Register.vue";
-
+import Success from '@/components/LoginSuccess.vue';
+import Fail from '@/components/LoginFail.vue';
+import Guest from "@/components/Guest.vue";
 
 const routes = [
   
@@ -19,7 +21,9 @@ const routes = [
   { path: "/detail", component: Detail},
   { path: "/login", component: Login },
   { path: "/register", component: Register },
-  
+  { path: "/login-success", component: Success },
+  { path: "/login-fail", component: Fail },
+  { path: "/guest", component: Guest },  
 ]
 ;
 
