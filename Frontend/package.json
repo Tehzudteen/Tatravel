@@ -13,6 +13,7 @@
     "@fawmi/vue-google-maps": "^0.9.79",
     "@fontsource/ibm-plex-sans-thai": "^5.1.0",
     "@fontsource/roboto": "^5.1.0",
+    "@fortawesome/fontawesome-free": "^6.6.0",
     "@fortawesome/fontawesome-svg-core": "^6.6.0",
     "@fortawesome/free-brands-svg-icons": "^6.6.0",
     "@fortawesome/free-regular-svg-icons": "^6.6.0",

@@ -49,12 +49,10 @@
 import { reactive, ref } from 'vue'
 
 const user = reactive({
-  name: 'John Doe',
-  email: 'john.doe@example.com',
-  location: 'New York, USA',
-  bio: 'Passionate traveler and photographer. Always seeking new adventures!',
-  avatarUrl: 'https://i.pinimg.com/originals/87/85/ad/8785ad36346ae3ba48ab80cabd498b8b.gif',
-  coverPhoto: 'https://i.pinimg.com/originals/87/85/ad/8785ad36346ae3ba48ab80cabd498b8b.gif',
+    name: 'John Doe',
+    email: 'john.doe@example.com',
+    avatarUrl: 'https://i.pinimg.com/originals/87/85/ad/8785ad36346ae3ba48ab80cabd498b8b.gif',
+    coverPhoto: 'https://i.pinimg.com/originals/87/85/ad/8785ad36346ae3ba48ab80cabd498b8b.gif',
 })
 
 const editing = reactive({

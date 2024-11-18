@@ -1,98 +1,201 @@
 <template>
-    <div class="container mx-auto p-4">
-      <div class="card bg-base-100 shadow-xl">
-        <div class="card-body">
-          <h2 class="card-title text-2xl font-bold mb-4">Festival Location</h2>
-          <div id="map" class="w-full h-96 mb-4"></div>
-          <div class="flex justify-between">
-            <button @click="centerMap" class="btn btn-primary">Center Map</button>
-            <button @click="getDirections" class="btn btn-secondary">Get Directions</button>
-          </div>
-        </div>
-      </div>
+  <div class="relative h-screen w-full">
+    <!-- Search Bar -->
+    <div class="fixed top-20 left-0 right-0 z-50 p-2 flex items-center gap-2">
+      <input
+        type="text"
+        placeholder="Search for a location"
+        v-model="searchQuery"
+        @keyup.enter="searchLocation"
+        class="input input-bordered flex-1 text-sm"
+      />
+      <button @click="searchLocation" class="btn btn-primary text-sm">
+        Search
+      </button>
     </div>
-  </template>
-  
-  <script>
-  export default {
-    name: 'MapPage',
-    data() {
-      return {
-        map: null,
-        marker: null,
-        // These would typically come from an API in the future
-        festivalLocation: { lat: 14.3534, lng: 100.5683 }, // Example coordinates for Ayutthaya
-        festivalName: 'Ancient Capital Loi Krathong Festival',
-        apiKey: 'YOUR_GOOGLE_MAPS_API_KEY', // Replace with your actual API key
+
+    <!-- Map -->
+    <div id="map" class="fixed top-0 left-0 right-0"></div>
+
+    <!-- Navigate Button -->
+    <div v-if="destination" class="fixed bottom-20 left-0 right-0 flex justify-center z-50">
+      <button @click="navigateToLocation" class="btn btn-secondary text-sm flex items-center gap-2">
+        <i class="fas fa-route"></i> <!-- FontAwesome Route Icon -->
+        {{ destinationName }}
+      </button>
+    </div>
+  </div>
+</template>
+
+<script>
+import mapboxgl from "mapbox-gl";
+
+export default {
+  name: "SpinningGlobeWithSearch",
+  data() {
+    return {
+      map: null,
+      userInteracting: false,
+      spinEnabled: true,
+      searchQuery: "",
+      destination: null,
+      destinationName: "",
+      // Configuration for globe spinning
+      secondsPerRevolution: 240, // Time for one revolution
+      maxSpinZoom: 5, // Max zoom level for spinning
+      slowSpinZoom: 3, // Slow spinning above this zoom level
+    };
+  },
+  mounted() {
+    this.initializeMap();
+    this.adjustForScreenSize();
+  },
+  methods: {
+    initializeMap() {
+      mapboxgl.accessToken =
+        "pk.eyJ1IjoibHVja3l0ZWgwMDgzIiwiYSI6ImNtMzdnMXZsdjBjcW4yanF4Y2hvYmF2dHQifQ.RMimJe1YsWLiWShNracDTQ";
+
+      this.map = new mapboxgl.Map({
+        container: "map",
+        style: "mapbox://styles/mapbox/streets-v9",
+        projection: "globe", // Use globe projection
+        zoom: 0.5,
+        center: [0, 15],
+      });
+
+      this.map.addControl(new mapboxgl.NavigationControl());
+      this.map.scrollZoom.disable();
+
+      this.map.on("style.load", () => {
+        this.map.setFog({}); // Add default atmosphere style
+      });
+
+      // Event listeners to manage interaction state
+      this.map.on("mousedown", () => {
+        this.userInteracting = true;
+      });
+      this.map.on("dragstart", () => {
+        this.userInteracting = true;
+      });
+      this.map.on("moveend", () => {
+        this.spinGlobe(); // Restart spinning after interaction ends
+      });
+
+      // Start spinning the globe
+      this.spinGlobe();
+    },
+    spinGlobe() {
+      if (this.spinEnabled && !this.userInteracting) {
+        const zoom = this.map.getZoom();
+        if (zoom < this.maxSpinZoom) {
+          let distancePerSecond = 360 / this.secondsPerRevolution;
+          if (zoom > this.slowSpinZoom) {
+            // Slow spinning at higher zooms
+            const zoomDif =
+              (this.maxSpinZoom - zoom) / (this.maxSpinZoom - this.slowSpinZoom);
+            distancePerSecond *= zoomDif;
+          }
+
+          const center = this.map.getCenter();
+          center.lng -= distancePerSecond;
+
+          // Smoothly animate the map over one second
+          this.map.easeTo({ center, duration: 1000, easing: (n) => n });
+        }
       }
     },
-    mounted() {
-      this.loadGoogleMapsAPI()
+    adjustForScreenSize() {
+      const viewportWidth = window.innerWidth;
+      if (viewportWidth <= 375) {
+        // Optimize for smartphone dimensions
+        this.map.setZoom(0.5);
+        this.map.setCenter([0, 15]);
+      }
     },
-    methods: {
-      loadGoogleMapsAPI() {
-        const script = document.createElement('script')
-        script.src = `https://maps.googleapis.com/maps/api/js?key=${this.apiKey}&callback=initMap`
-        script.async = true
-        script.defer = true
-        window.initMap = this.initMap
-        document.head.appendChild(script)
-      },
-      initMap() {
-        this.map = new google.maps.Map(document.getElementById('map'), {
-          center: this.festivalLocation,
-          zoom: 14
-        })
-        this.marker = new google.maps.Marker({
-          position: this.festivalLocation,
-          map: this.map,
-          title: this.festivalName
-        })
-      },
-      centerMap() {
-        if (this.map && this.marker) {
-          this.map.panTo(this.marker.getPosition())
-          this.map.setZoom(15)
-        }
-      },
-      getDirections() {
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(
-            (position) => {
-              const userLocation = {
-                lat: position.coords.latitude,
-                lng: position.coords.longitude
-              }
-              const url = `https://www.google.com/maps/dir/?api=1&origin=${userLocation.lat},${userLocation.lng}&destination=${this.festivalLocation.lat},${this.festivalLocation.lng}`
-              window.open(url, '_blank')
-            },
-            () => {
-              alert('Unable to get your location. Please enable location services and try again.')
-            }
-          )
+    async searchLocation() {
+      if (!this.searchQuery.trim()) {
+        alert("Please enter a search term.");
+        return;
+      }
+
+      const geocodingUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
+        this.searchQuery
+      )}.json?access_token=${mapboxgl.accessToken}`;
+
+      try {
+        const response = await fetch(geocodingUrl);
+        const data = await response.json();
+
+        if (data.features && data.features.length > 0) {
+          const location = data.features[0];
+          const [lng, lat] = location.center;
+
+          // Fly to the searched location
+          this.map.flyTo({
+            center: [lng, lat],
+            zoom: 10,
+          });
+
+          // Add a marker at the searched location
+          new mapboxgl.Marker()
+            .setLngLat([lng, lat])
+            .setPopup(
+              new mapboxgl.Popup().setHTML(
+                `<h3>${location.text}</h3><p>${location.place_name}</p>`
+              )
+            )
+            .addTo(this.map);
+
+          // Set destination for navigation
+          this.destination = { lat, lng };
+          this.destinationName = location.text;
         } else {
-          alert('Geolocation is not supported by your browser.')
+          alert("Location not found. Try another search term.");
         }
-      },
-      // Placeholder method for future API integration
-      async fetchFestivalDetails() {
-        try {
-          // In the future, replace this with an actual API call
-          // const response = await fetch('your-api-endpoint');
-          // const data = await response.json();
-          // this.festivalLocation = data.location;
-          // this.festivalName = data.name;
-          console.log('Fetching festival details from API...')
-        } catch (error) {
-          console.error('Error fetching festival details:', error)
-        }
+      } catch (error) {
+        console.error("Error searching location:", error);
+        alert("Failed to search for location. Please try again.");
       }
-    }
-  }
-  </script>
-  
-  <style scoped>
-  /* Add any additional custom styles here if needed */
-  </style>
+    },
+    navigateToLocation() {
+      if (!navigator.geolocation) {
+        alert("Geolocation is not supported by your browser.");
+        return;
+      }
 
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const userLocation = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          };
+          const url = `https://www.google.com/maps/dir/?api=1&origin=${userLocation.lat},${userLocation.lng}&destination=${this.destination.lat},${this.destination.lng}`;
+          window.open(url, "_blank");
+        },
+        () => {
+          alert("Unable to get your location. Please enable location services.");
+        }
+      );
+    },
+  },
+};
+</script>
 
+<style scoped>
+/* Ensure map covers the full viewport */
+#map {
+  width: 100%;
+  height: 100%;
+}
+
+/* Responsiveness and alignment for search bar */
+.input {
+  padding: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.btn {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+}
+</style>
