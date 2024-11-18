@@ -15,12 +15,23 @@ const routes = [
   { path: "/aichat", component: Aichat },
   { path: "/map", component: Map },
   { path: "/profile", component: Profile },
-  { path: "/detail", component: Detail},
+  { 
+    path: "/detail", 
+    component: Detail, 
+    props: route => ({
+      name: route.query.name,
+      province: route.query.province,
+      eventType: route.query.eventType,
+      tel: route.query.tel,
+      website: route.query.website,
+      detail: route.query.detail,
+      imageUrl: route.query.imageUrl,
+    }) 
+  },
   { path: "/login", component: Login },
   { path: "/register", component: Register },
   { path: "/guest", component: Guest },  
-]
-;
+];
 
 const router = createRouter({
   history: createWebHistory(),
