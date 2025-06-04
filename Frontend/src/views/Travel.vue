@@ -1,21 +1,18 @@
 <template>
   <div>
     <div v-for="(item, index) in items" :key="index" class="carousel-item">
-      <router-link 
-        :to="{
-          path: '/detail',
-          query: {
-            name: item.title,
-            province: item.province,
-            eventType: item.eventType,
-            tel: item.tel,
-            website: item.website,
-            detail: item.description,
-            imageUrl: item.image,
-          }
-        }"
-        class="relative flex flex-2 my-2 mx-2 bg-white shadow-sm border border-slate-200 rounded-lg w-full"
-      >
+      <router-link :to="{
+        path: '/detail',
+        query: {
+          name: item.title,
+          province: item.province,
+          eventType: item.eventType,
+          tel: item.tel,
+          website: item.website,
+          detail: item.description,
+          imageUrl: item.image,
+        }
+      }" class="relative flex flex-2 my-2 mx-2 bg-white shadow-sm border border-slate-200 rounded-lg w-full">
         <div class="relative h-fit w-full m-2.5 overflow-hidden text-white rounded-md">
           <img :src="item.image" class="h-full w-full" alt="House image" />
         </div>
@@ -38,7 +35,11 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
+const searchQuery = ref(route.query.q || ""); // Get the search query from the route
 
 const items = ref([
   {
@@ -217,10 +218,20 @@ const items = ref([
     title: "Harajuku Thailand",
     province: "กรุงเทพมหานคร",
     eventType: "Location",
-    tel: "0845962751",
+    tel: "123-456-7890",
     website: "https://maps.app.goo.gl/VuTTkK82XPrp93Rd9",
     description: "ใครที่โหยหาการไป เที่ยวญี่ปุ่น ตามมาเช็คอินกันได้ที่ ฮาราจูกุ ไทยแลนด์ Harajuku Thailand ที่เที่ยวกรุงเทพฯ ย่านสุวินทวงศ์",
   },
 
 ]);
+
+// Filter items based on the search query
+const filteredItems = computed(() =>
+  items.value.filter(
+    (item) =>
+      item.title.includes(searchQuery.value) ||
+      item.province.includes(searchQuery.value) ||
+      item.description.includes(searchQuery.value)
+  )
+);
 </script>

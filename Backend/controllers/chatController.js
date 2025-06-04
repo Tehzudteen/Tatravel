@@ -1,31 +1,27 @@
-const client = require("../config/openaiClient"); // Import the OpenAI client
-const ChatMessage = require("../models/ChatMessage"); // Import the model
+const client = require("../config/openaiClient");
+const ChatMessage = require("../models/ChatMessage");
 
-// Retry helper function
 const retryRequest = async (fn, retries = 3) => {
   for (let i = 0; i < retries; i++) {
     try {
       return await fn();
     } catch (error) {
-      if (i === retries - 1) throw error; // Throw error if retries exhausted
+      if (i === retries - 1) throw error;
     }
   }
 };
 
-// Controller function to handle chat responses
 const getChatResponse = async (req, res) => {
   try {
     const { message } = req.body;
 
-    // Validate the incoming request
     if (!message || typeof message !== "string") {
       return res.status(400).json({ error: "Invalid message format" });
     }
 
-    // Retry request in case of transient failures
     const response = await retryRequest(() =>
       client.chat.completions.create({
-        model: "typhoon-v1.5x-70b-instruct",
+        model: "typhoon-v2.1-12b-instruct", // Replace with available Typhoon model
         messages: [{ role: "user", content: message }],
         max_tokens: 512,
         temperature: 0.6,
@@ -34,20 +30,18 @@ const getChatResponse = async (req, res) => {
       })
     );
 
-    // Save the chat message to MongoDB (non-blocking)
+    const reply = response.choices[0].message.content.trim();
+
     ChatMessage.create({ user: "user", message }).catch(err =>
-      console.error("Failed to save message to MongoDB:", err)
+      console.error("Mongo save error:", err)
     );
 
-    // Send response to the client
-    res.json({ message: response.choices[0].message.content });
+    res.json({ message: reply });
   } catch (error) {
-    console.error("Error in getChatResponse:", error);
-
-    // Enhanced error response for debugging
+    console.error("Error in getChatResponse:", error.response?.data || error.message);
     res.status(500).json({
-      error: "An error occurred while processing your request.",
-      details: error.message,
+      error: "An error occurred while calling the AI API.",
+      details: error.response?.data || error.message,
     });
   }
 };

@@ -1,0 +1,38 @@
+# Node.js
+node_modules/
+.env
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Logs
+logs/
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# VSCode
+.vscode/
+
+# IDEs
+.idea/
+*.iml
+
+# Build files (optional for frontend or dist folders)
+dist/
+build/
+
+# MongoDB dump files (optional)
+dump/
+
+# Production environment
+.env.local
+.env.production
+.env.development
+.env.test
+.env.*.local
+
+# Optional: Ignore uploaded files if not meant to be tracked
+/uploads/

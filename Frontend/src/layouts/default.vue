@@ -4,16 +4,18 @@
       class="fixed top-0 left-0 right-0 z-50 bg-primary text-primary-content p-4 flex justify-between items-center min-w-80"
     >
       <h1 class="text-2xl font-bold">Tatravel</h1>
-      <!--  Search  -->
+      <!-- Search -->
       <div class="mx-3 join">
         <input
+          v-model="searchQuery"
           type="text"
-          placeholder="Search books..."
+          placeholder="Search places..."
           class="input input-bordered input-primary join-item max-w-32"
         />
         <button
           class="btn btn-neutral join-item max-w-1 fa fa-magnifying-glass"
           style="color: #ffd43b"
+          @click="performSearch"
         ></button>
       </div>
     </header>
@@ -36,12 +38,7 @@
       >
         <button @click="navigate" :class="{ active: isActive }">
           <i
-            :class="[
-              'fas',
-              tab.icon,
-              'text-2xl',
-              { 'animate-bounce': isActive },
-            ]"
+            :class="[ 'fas', tab.icon, 'text-2xl', { 'animate-bounce': isActive } ]"
           ></i>
           <span class="btm-nav-label">{{ tab.name }}</span>
         </button>
@@ -51,12 +48,20 @@
 </template>
 
 <script>
-import { ref, computed } from "vue";
-import { useRoute } from "vue-router";
+import { ref } from "vue";
+import { useRouter } from "vue-router";
 
 export default {
   name: "DefaultLayout",
   setup() {
+    const router = useRouter();
+    const searchQuery = ref("");
+
+    const performSearch = () => {
+      if (searchQuery.value.trim()) {
+        router.push({ path: "/travel", query: { q: searchQuery.value } });
+      }
+    };
 
     const tabs = ref([
       { name: "Home", icon: "fa-home", path: "/" },
@@ -66,7 +71,7 @@ export default {
       { name: "Profile", icon: "fa-address-card", path: "/profile" },
     ]);
 
-    return { tabs };
+    return { tabs, searchQuery, performSearch };
   },
 };
 </script>
