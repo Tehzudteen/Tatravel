@@ -52,8 +52,13 @@ export default {
   },
   methods: {
     initializeMap() {
-      mapboxgl.accessToken =
-        "pk.eyJ1IjoibHVja3l0ZWgwMDgzIiwiYSI6ImNtMzdnMXZsdjBjcW4yanF4Y2hvYmF2dHQifQ.RMimJe1YsWLiWShNracDTQ";
+      // Read from Vite env
+      const token = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
+      if (!token) {
+        console.error("Mapbox token missing. Set VITE_MAPBOX_ACCESS_TOKEN in .env and restart dev server.");
+        return;
+      }
+      mapboxgl.accessToken = token;
 
       this.map = new mapboxgl.Map({
         container: "map",
@@ -180,6 +185,8 @@ export default {
   },
 };
 </script>
+
+
 
 <style scoped>
 /* Ensure map covers the full viewport */
